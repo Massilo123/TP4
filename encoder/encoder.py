@@ -84,11 +84,9 @@ def exec_convert(input_file, output_file, from_encoding: str, to_encoding: str) 
         }
         from_encoding = iconv_conversions.get(from_encoding, from_encoding)
         to_encoding = iconv_conversions.get(to_encoding, to_encoding)
-        return subprocess.run(['iconv',
-                               '--from-code', from_encoding,
-                               '--to-code', to_encoding,
-                               input_file,
-                               '--output', output_file], check=True)
+        with open(output_file, 'wb') as outf:
+            return subprocess.run(['iconv', '-f', from_encoding, '-t', to_encoding, input_file],
+                                  stdout=outf, check=True)
 
 
 def convert(input_file, output_file, from_encoding, to_encoding):
