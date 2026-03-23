@@ -76,6 +76,14 @@ def exec_convert(input_file, output_file, from_encoding: str, to_encoding: str) 
                                f'Get-Content "{input_file}" -Encoding {from_encoding} | Set-Content "{output_file}" -Encoding {to_encoding}'],
                               check=True)
     else:
+        iconv_conversions = {
+            'UTF-16-LE': 'UTF-16LE',
+            'UTF-16-BE': 'UTF-16BE',
+            'UTF-32-LE': 'UTF-32LE',
+            'UTF-32-BE': 'UTF-32BE',
+        }
+        from_encoding = iconv_conversions.get(from_encoding, from_encoding)
+        to_encoding = iconv_conversions.get(to_encoding, to_encoding)
         return subprocess.run(['iconv',
                                '--from-code', from_encoding,
                                '--to-code', to_encoding,
